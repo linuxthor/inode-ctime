@@ -36,7 +36,7 @@ void update_ctime_file(const char *pathname)
 int scrub_init(void)
 {
     update_ctime_file("/root/.bash_history");
-    return(0);
+    return 0;
 }
 
 void scrub_exit(void)
